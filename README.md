@@ -16,6 +16,10 @@ Es un juego para entrenar tu capacidad de concentración y velocidad de reacció
 - Progreso guardado automáticamente en localStorage
 - Interfaz responsiva (móvil, tablet, desktop)
 
+## Despliegue
+Se puede ver el juegop desplegado en el siguiente link.
+https://mind-games-eight.vercel.app/
+
 ## Requisitos
 
 - Node.js 18+
