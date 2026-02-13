@@ -27,7 +27,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onPlay, onInfinite }) => {
       <div className="flex flex-col gap-4 w-full max-w-md px-6">
         <button 
           onClick={onPlay}
-          className="bg-[#2b6eff] hover:bg-blue-700 text-white text-3xl font-black py-8 px-12 rounded-[2rem] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-4 uppercase"
+          className="bg-[#2b6eff] hover:bg-blue-700 text-white text-2xl font-black py-8 px-12 rounded-[2rem] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-4 uppercase"
         >
           <i className="fas fa-th-large text-4xl"></i>
           Niveles
@@ -35,7 +35,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onPlay, onInfinite }) => {
 
         <button 
           onClick={onInfinite}
-          className="bg-[#9d3eff] hover:bg-purple-700 text-white text-3xl font-black py-8 px-12 rounded-[2rem] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-4 uppercase"
+          className="bg-[#9d3eff] hover:bg-purple-700 text-white text-2xl font-black py-8 px-12 rounded-[2rem] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-4 uppercase"
         >
           <i className="fas fa-infinity text-4xl"></i>
           Modo Infinito
