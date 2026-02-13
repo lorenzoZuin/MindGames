@@ -1,4 +1,4 @@
-# Mente Agil: Desafio de Colores
+# Colores: Desafio mental
 
 Una aplicación web interactiva para desafiar tu mente con un juego de colores y palabras. Identifica rápidamente el color correcto cuando el nombre de un color aparece escrito en un color diferente.
 
