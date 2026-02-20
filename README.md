@@ -6,6 +6,10 @@ Una aplicación web interactiva para desafiar tu mente con un juego de colores y
 
 Es un juego para entrenar tu capacidad de concentración y velocidad de reacción. El juego presenta el nombre de un color escrito en un color diferente, y debes seleccionar la opción que corresponde al color en el que está escrito el texto, no el color que dice la palabra. Este es un ejemplo del efecto Stroop, un fenómeno psicológico bien conocido.
 
+## Despliegue
+Se puede ver el juegop desplegado en el siguiente link.
+https://mind-games-eight.vercel.app/
+
 ## Características
 
 - 50 niveles progresivos con dificultad creciente
