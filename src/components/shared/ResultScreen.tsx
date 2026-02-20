@@ -1,16 +1,22 @@
 
 import React from 'react';
-import { LevelProgress } from '../types';
+import { LevelProgress } from '../../types';
 
 interface ResultScreenProps {
   result: LevelProgress;
   isInfinite: boolean;
+  gameType?: string | null;
   onNext: () => void;
   onRetry: () => void;
   onMenu: () => void;
 }
 
-const ResultScreen: React.FC<ResultScreenProps> = ({ result, isInfinite, onNext, onRetry, onMenu }) => {
+const ResultScreen: React.FC<ResultScreenProps> = ({ result, isInfinite, gameType, onNext, onRetry, onMenu }) => {
+  const isScoreBased = gameType === 'nombres';
+  const metricLabel = isScoreBased ? 'Puntaje' : 'Tiempo';
+  const metricValue = result.timeTaken; // We reused this field
+  const metricUnit = isScoreBased ? '%' : 's';
+
   return (
     <div className="max-w-2xl w-full text-center space-y-10 bg-white p-16 rounded-[3rem] shadow-2xl border border-gray-100">
       <h2 className="text-6xl font-black text-slate-800 uppercase tracking-tight">
@@ -37,10 +43,7 @@ const ResultScreen: React.FC<ResultScreenProps> = ({ result, isInfinite, onNext,
 
       <div className="space-y-3">
         <p className="text-3xl font-bold text-slate-600">
-          Tiempo: <span className="text-blue-500 font-black">{result.timeTaken}s</span>
-        </p>
-        <p className="text-2xl text-slate-400 font-medium">
-          Tu cerebro está más ágil hoy.
+          {metricLabel}: <span className="text-blue-500 font-black">{metricValue}{metricUnit}</span>
         </p>
       </div>
 

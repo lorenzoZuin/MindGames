@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { LevelProgress } from '../types';
+import { LevelProgress } from '../../../types';
 
 interface LevelSelectorProps {
   levels: LevelProgress[];
@@ -25,7 +24,7 @@ const LevelSelector: React.FC<LevelSelectorProps> = ({ levels, onSelectLevel, on
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-6 overflow-y-auto pr-2 pb-6 custom-scrollbar p-2 -m-2">
         {levels.map((lvl, index) => {
           const isUnlocked = index === 0 || levels[index - 1].completed;
-          
+
           return (
             <button
               key={lvl.levelNumber}
@@ -34,7 +33,7 @@ const LevelSelector: React.FC<LevelSelectorProps> = ({ levels, onSelectLevel, on
               className={`
                 aspect-square flex flex-col items-center justify-center rounded-[2rem] transition-all
                 ${isUnlocked 
-                  ? 'bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white cursor-pointer shadow-md hover:shadow-blue-200 scale-100 hover:scale-105 active:scale-95' 
+                  ? 'bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white cursor-pointer shadow-md hover:shadow-purple-200 scale-100 hover:scale-105 active:scale-95' 
                   : 'bg-slate-50 text-slate-300 cursor-not-allowed opacity-60'}
               `}
             >

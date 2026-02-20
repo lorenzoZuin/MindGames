@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { COLORS, QUESTIONS_PER_LEVEL, BASE_OPTIONS_COUNT, OPTIONS_INCREASE_INTERVAL, STARS_3_THRESHOLD, STARS_2_THRESHOLD } from '../constants';
-import { Question } from '../types';
+import { COLORS, QUESTIONS_PER_LEVEL, BASE_OPTIONS_COUNT, OPTIONS_INCREASE_INTERVAL, STARS_3_THRESHOLD, STARS_2_THRESHOLD } from '../../../constants';
+import { Question } from '../../../types';
 
 interface GameBoardProps {
   level: number;
