@@ -33,6 +33,20 @@ const GAMES: Game[] = [
     icon: 'fas fa-coins',
     color: 'bg-gradient-to-br from-yellow-400 to-yellow-600',
     disabled: false
+  },
+  {
+    id: 'frase',
+    name: 'Ordena la frase',
+    icon: 'fas fa-align-left',
+    color: 'bg-gradient-to-br from-emerald-400 to-teal-600',
+    disabled: false
+  },
+  {
+    id: 'igual',
+    name: 'Encuentra el igual',
+    icon: 'fas fa-clone',
+    color: 'bg-gradient-to-br from-orange-400 to-amber-500',
+    disabled: false
   }
 ];
 
@@ -48,7 +62,7 @@ const GameSelectionMenu: React.FC<GameSelectionMenuProps> = ({ onSelectGame }) =
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 max-w-6xl w-full">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 max-w-7xl w-full">
         {GAMES.map((game) => (
           <button
             key={game.id}

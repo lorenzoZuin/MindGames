@@ -16,11 +16,12 @@ const ResultScreen: React.FC<ResultScreenProps> = ({ result, isInfinite, gameTyp
   const metricLabel = isScoreBased ? 'Puntaje' : 'Tiempo';
   const metricValue = result.timeTaken; // We reused this field
   const metricUnit = isScoreBased ? '%' : 's';
+  const titleText = isInfinite ? '¡Genial!' : result.stars > 0 ? '¡Completado!' : '¡Fallido!';
 
   return (
     <div className="max-w-2xl w-full text-center space-y-10 bg-white p-16 rounded-[3rem] shadow-2xl border border-gray-100">
       <h2 className="text-6xl font-black text-slate-800 uppercase tracking-tight">
-        {isInfinite ? '¡Genial!' : '¡Completado!'}
+        {titleText}
       </h2>
 
       {isInfinite ? (
@@ -48,7 +49,7 @@ const ResultScreen: React.FC<ResultScreenProps> = ({ result, isInfinite, gameTyp
       </div>
 
       <div className="flex flex-col gap-4 pt-8">
-        {!isInfinite && (
+        {!isInfinite && result.stars > 0 && (
           <button 
             onClick={onNext}
             className="bg-[#2b6eff] hover:bg-blue-700 text-white text-3xl font-black py-8 rounded-[2rem] shadow-xl transition-all active:scale-95 uppercase"

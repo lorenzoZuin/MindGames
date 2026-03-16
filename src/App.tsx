@@ -4,13 +4,19 @@ import { GameState, LevelProgress } from './types';
 import MainMenu from './components/games/Colores/MenuColores';
 import CoinGameMenu from './components/games/SeguirLaMoneda/MenuSeguirLaMoneda';
 import RecordarNombresMenu from './components/games/RecordarNombres/MenuRecordarNombres';
+import MenuOrdenaLaFrase from './components/games/OrdenaLaFrase/MenuOrdenaLaFrase';
+import MenuEncuentraElIgual from './components/games/EncuentraElIgual/MenuEncuentraElIgual';
 import GameSelectionMenu from './components/shared/GameSelectionMenu';
 import LevelSelector from './components/games/Colores/LevelSelector';
 import CoinLevelSelector from './components/games/SeguirLaMoneda/LevelSelector';
 import RecordarNombresLevelSelector from './components/games/RecordarNombres/LevelSelector';
+import OrdenaLaFraseLevelSelector from './components/games/OrdenaLaFrase/LevelSelector';
+import EncuentraElIgualLevelSelector from './components/games/EncuentraElIgual/LevelSelector';
 import GameBoard from './components/games/Colores/GameBoard';
 import CoinGameBoard from './components/games/SeguirLaMoneda/CoinGameBoard';
 import RecordarNombresBoard from './components/games/RecordarNombres/RecordarNombresBoard';
+import OrdenaLaFraseBoard from './components/games/OrdenaLaFrase/OrdenaLaFraseBoard';
+import EncuentraElIgualBoard from './components/games/EncuentraElIgual/EncuentraElIgualBoard';
 import ResultScreen from './components/shared/ResultScreen';
 import { TOTAL_LEVELS } from './constants';
 
@@ -51,6 +57,28 @@ const App: React.FC = () => {
     }));
   });
 
+  const [fraseHistory, setFraseHistory] = useState<LevelProgress[]>(() => {
+    const saved = localStorage.getItem('ordenafrase_progress');
+    if (saved) return JSON.parse(saved);
+    return Array.from({ length: TOTAL_LEVELS }, (_, i) => ({
+      levelNumber: i + 1,
+      stars: 0,
+      timeTaken: 0,
+      completed: false,
+    }));
+  });
+
+  const [encuentraIgualHistory, setEncuentraIgualHistory] = useState<LevelProgress[]>(() => {
+    const saved = localStorage.getItem('encuentraigual_progress');
+    if (saved) return JSON.parse(saved);
+    return Array.from({ length: TOTAL_LEVELS }, (_, i) => ({
+      levelNumber: i + 1,
+      stars: 0,
+      timeTaken: 0,
+      completed: false,
+    }));
+  });
+
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const [lastResult, setLastResult] = useState<LevelProgress | null>(null);
 
@@ -66,6 +94,14 @@ const App: React.FC = () => {
     localStorage.setItem('recordarnombres_progress', JSON.stringify(nombresHistory));
   }, [nombresHistory]);
 
+  useEffect(() => {
+    localStorage.setItem('ordenafrase_progress', JSON.stringify(fraseHistory));
+  }, [fraseHistory]);
+
+  useEffect(() => {
+    localStorage.setItem('encuentraigual_progress', JSON.stringify(encuentraIgualHistory));
+  }, [encuentraIgualHistory]);
+
   const handleLevelComplete = (metric1: number, metric2: number) => {
     const isInfinite = gameState === 'INFINITE';
     
@@ -79,6 +115,12 @@ const App: React.FC = () => {
     } else if (selectedGame === 'nombres') {
       currentHistory = nombresHistory;
       setHistory = setNombresHistory;
+    } else if (selectedGame === 'frase') {
+      currentHistory = fraseHistory;
+      setHistory = setFraseHistory;
+    } else if (selectedGame === 'igual') {
+      currentHistory = encuentraIgualHistory;
+      setHistory = setEncuentraIgualHistory;
     }
 
     // Determine what the metrics mean
@@ -109,7 +151,7 @@ const App: React.FC = () => {
             ...level,
             stars: betterStars,
             timeTaken: bestSecondary, // Storing score in timeTaken field for Nombres implies field rename or reuse
-            completed: true
+            completed: level.completed || stars > 0
           };
         }
         return level;
@@ -139,7 +181,7 @@ const App: React.FC = () => {
 
   const handleSelectGame = (gameId: string) => {
     setSelectedGame(gameId);
-    if (gameId === 'colores' || gameId === 'moneda' || gameId === 'nombres') {
+    if (gameId === 'colores' || gameId === 'moneda' || gameId === 'nombres' || gameId === 'frase' || gameId === 'igual') {
       setGameState('MENU');
     }
   };
@@ -186,6 +228,20 @@ const App: React.FC = () => {
         />
       )}
 
+      {gameState === 'MENU' && selectedGame === 'frase' && (
+        <MenuOrdenaLaFrase
+          onPlay={() => setGameState('LEVEL_SELECTOR')}
+          onInfinite={startInfinite}
+        />
+      )}
+
+      {gameState === 'MENU' && selectedGame === 'igual' && (
+        <MenuEncuentraElIgual
+          onPlay={() => setGameState('LEVEL_SELECTOR')}
+          onInfinite={startInfinite}
+        />
+      )}
+
       {/* Level Selectors */}
       {gameState === 'LEVEL_SELECTOR' && selectedGame === 'colores' && (
         <LevelSelector 
@@ -206,6 +262,22 @@ const App: React.FC = () => {
       {gameState === 'LEVEL_SELECTOR' && selectedGame === 'nombres' && (
         <RecordarNombresLevelSelector
           levels={nombresHistory}
+          onSelectLevel={startLevel}
+          onBack={() => setGameState('MENU')}
+        />
+      )}
+
+      {gameState === 'LEVEL_SELECTOR' && selectedGame === 'frase' && (
+        <OrdenaLaFraseLevelSelector
+          levels={fraseHistory}
+          onSelectLevel={startLevel}
+          onBack={() => setGameState('MENU')}
+        />
+      )}
+
+      {gameState === 'LEVEL_SELECTOR' && selectedGame === 'igual' && (
+        <EncuentraElIgualLevelSelector
+          levels={encuentraIgualHistory}
           onSelectLevel={startLevel}
           onBack={() => setGameState('MENU')}
         />
@@ -234,6 +306,24 @@ const App: React.FC = () => {
           level={currentLevel}
           isInfinite={gameState === 'INFINITE'}
           onGameComplete={(stars, score) => handleLevelComplete(stars, score)} 
+          onExit={() => setGameState('MENU')}
+        />
+      )}
+
+      {(gameState === 'PLAYING' || gameState === 'INFINITE') && selectedGame === 'frase' && (
+        <OrdenaLaFraseBoard
+          level={currentLevel}
+          isInfinite={gameState === 'INFINITE'}
+          onGameComplete={(stars, timeTaken) => handleLevelComplete(stars, timeTaken)}
+          onExit={() => setGameState('MENU')}
+        />
+      )}
+
+      {(gameState === 'PLAYING' || gameState === 'INFINITE') && selectedGame === 'igual' && (
+        <EncuentraElIgualBoard
+          level={currentLevel}
+          isInfinite={gameState === 'INFINITE'}
+          onGameComplete={(stars, timeTaken) => handleLevelComplete(stars, timeTaken)}
           onExit={() => setGameState('MENU')}
         />
       )}

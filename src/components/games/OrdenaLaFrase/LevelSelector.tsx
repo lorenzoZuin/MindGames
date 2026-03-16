@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { LevelProgress } from '../../../types';
 import GameLevelSelector from '../../shared/GameLevelSelector';
@@ -15,7 +14,7 @@ const LevelSelector: React.FC<LevelSelectorProps> = ({ levels, onSelectLevel, on
       levels={levels}
       onSelectLevel={onSelectLevel}
       onBack={onBack}
-      unlockedLevelClassName="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white cursor-pointer shadow-md hover:shadow-blue-200 scale-100 hover:scale-105 active:scale-95"
+      unlockedLevelClassName="bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white cursor-pointer shadow-md hover:shadow-emerald-200 scale-100 hover:scale-105 active:scale-95"
     />
   );
 };

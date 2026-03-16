@@ -45,12 +45,14 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
   const [cups, setCups] = useState<Cup[]>([]);
   const [message, setMessage] = useState('¡Prepárate!');
   const [containerWidth, setContainerWidth] = useState(0);
+  const [feedbackState, setFeedbackState] = useState<'neutral' | 'success' | 'error'>('neutral');
   
   const containerRef = useRef<HTMLDivElement>(null);
   const swapsQueueRef = useRef<{a: number, b: number}[]>([]);
   const isAnimatingRef = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   // Initialize level
   useEffect(() => {
@@ -87,6 +89,7 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
     setCups(newCups);
     setGameState('PREPARE');
     setMessage(`Nivel ${currentLevel}`);
+    setFeedbackState('neutral');
     
     // Sequence
     setTimeout(() => {
@@ -142,44 +145,31 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
 
     // Find cups at position a and b
     setCups(prev => {
-      const cupsCopy = [...prev];
-      const cupAIndex = cupsCopy.findIndex(c => c.x === a);
-      const cupBIndex = cupsCopy.findIndex(c => c.x === b);
-      
-      const cupA = cupsCopy[cupAIndex];
-      const cupB = cupsCopy[cupBIndex];
+      const cupA = prev.find(c => c.x === a);
+      const cupB = prev.find(c => c.x === b);
 
-      // Mutate for next render
-      // To simulate depth/z-index swap: one goes 'back' (y=0), one comes 'front' (y=1) or similar
-      // Actually, we can just swap x. Ideally we animate it.
-      // But React state updates are instantaneous. We need CSS transition.
-      // The issue with swapping X index directly is that we need to distinguish who goes in front.
-      
-      // Let's create a visual swap.
-      // We will perform the swap in state, but use a "transitioning" state ideally.
-      // For simplicity with this setup:
-      // We update X coordinates.
-      // We also update Z-index (represented by a temporary style or order).
-      
-      // Heuristic: The cup moving from left to right goes in front (arbitrary) or random.
-      const moveFront = Math.random() > 0.5;
+      if (!cupA || !cupB) {
+        return prev;
+      }
 
-      // Swap positions
-      const tempX = cupA.x;
-      cupA.x = cupB.x;
-      cupB.x = tempX;
-      
-      // Assign z-index boost
-      cupA.y = moveFront ? 10 : 0;
-      cupB.y = !moveFront ? 10 : 0;
-
-      return cupsCopy;
+      // Apply an arc-like crossing path so swaps are visibly animated.
+      return prev.map(c => {
+        if (c.id === cupA.id) {
+          return { ...c, x: b, y: -26 };
+        }
+        if (c.id === cupB.id) {
+          return { ...c, x: a, y: 26 };
+        }
+        return c;
+      });
     });
 
     // Reset Z-index after animation
     setTimeout(() => {
-      setCups(prev => prev.map(c => ({ ...c, y: 0 })));
-      processNextSwap();
+      setCups(prev => prev.map(c => (c.y !== 0 ? { ...c, y: 0 } : c)));
+      setTimeout(() => {
+        processNextSwap();
+      }, 40);
     }, speed);
   };
 
@@ -194,6 +184,8 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
     setGameState('REVEAL');
 
     if (cup.hasCoin) {
+      setFeedbackState('success');
+      playSuccessSound();
       setMessage('¡Correcto!');
       const timeTaken = (Date.now() - startTimeRef.current) / 1000;
       setTimeout(() => {
@@ -204,6 +196,8 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
         }
       }, 1500);
     } else {
+      setFeedbackState('error');
+      playErrorSound();
       setMessage('¡Incorrecto!');
       // Reveal the actual coin
       setTimeout(() => {
@@ -215,6 +209,54 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
     }
   };
 
+  const getAudioContext = () => {
+    if (typeof window === 'undefined') return null;
+    const AudioContextClass = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return null;
+
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContextClass();
+    }
+
+    if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
+    }
+
+    return audioContextRef.current;
+  };
+
+  const playTone = (frequency: number, durationMs: number, delaySeconds = 0, type: OscillatorType = 'sine', gainValue = 0.05) => {
+    const audioContext = getAudioContext();
+    if (!audioContext) return;
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const startAt = audioContext.currentTime + delaySeconds;
+    const endAt = startAt + durationMs / 1000;
+
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, startAt);
+
+    gain.gain.setValueAtTime(0.0001, startAt);
+    gain.gain.exponentialRampToValueAtTime(gainValue, startAt + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, endAt);
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+    oscillator.start(startAt);
+    oscillator.stop(endAt + 0.02);
+  };
+
+  const playSuccessSound = () => {
+    playTone(660, 120, 0, 'triangle', 0.06);
+    playTone(880, 150, 0.13, 'triangle', 0.06);
+  };
+
+  const playErrorSound = () => {
+    playTone(300, 140, 0, 'sawtooth', 0.05);
+    playTone(220, 180, 0.12, 'sawtooth', 0.05);
+  };
+
   // Determine Cup Width based on count
   const numCups = MAX_CUPS_BY_LEVEL(level);
   
@@ -224,26 +266,38 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
   
   // Constants for layout
   const MAX_CUP_WIDTH = 120;
-  const GAP = 20;
+  const MIN_CUP_WIDTH = 56;
+  const MAX_GAP = 20;
+  const MIN_GAP = 8;
+  const HORIZONTAL_PADDING = 24;
 
   // Calculate dynamic cup width based on container
   const calculateLayout = () => {
-     const safeWidth = containerWidth || window.innerWidth || 800; // Fallback
-     const availableWidth = safeWidth - 40; // Padding
-     const totalGap = (numCups - 1) * GAP;
+     const safeWidth = containerWidth || window.innerWidth || 800;
+     const availableWidth = Math.max(0, safeWidth - HORIZONTAL_PADDING * 2);
+     const gap = numCups > 1
+      ? Math.min(MAX_GAP, Math.max(MIN_GAP, availableWidth * 0.04))
+      : 0;
+     const totalGap = (numCups - 1) * gap;
+
      let calculatedWidth = (availableWidth - totalGap) / numCups;
      calculatedWidth = Math.min(MAX_CUP_WIDTH, calculatedWidth);
+     calculatedWidth = Math.max(MIN_CUP_WIDTH, calculatedWidth);
+
+     if (calculatedWidth * numCups + totalGap > availableWidth) {
+      calculatedWidth = Math.max(0, (availableWidth - totalGap) / numCups);
+     }
      
      const totalContentWidth = numCups * calculatedWidth + totalGap;
-     const startX = (safeWidth - totalContentWidth) / 2;
+     const startX = Math.max(HORIZONTAL_PADDING, (safeWidth - totalContentWidth) / 2);
 
-     return { cupWidth: calculatedWidth, startX };
+     return { cupWidth: calculatedWidth, startX, gap };
   };
 
-  const { cupWidth, startX } = calculateLayout();
+    const { cupWidth, startX, gap } = calculateLayout();
 
   const getXPosition = (slotIndex: number) => {
-      return startX + slotIndex * (cupWidth + GAP);
+      return startX + slotIndex * (cupWidth + gap);
   };
 
   // Coin style to look more flat (oval)
@@ -261,14 +315,21 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
      zIndex: 0 // On the table
   };
 
+  const feedbackClasses =
+    feedbackState === 'success'
+      ? 'border-emerald-500 shadow-emerald-300/60 bg-emerald-50'
+      : feedbackState === 'error'
+      ? 'border-red-500 shadow-red-300/60 bg-red-50'
+      : 'border-gray-900 bg-gray-700';
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-800 w-full overflow-hidden absolute inset-0">
-      <div className="text-3xl font-bold text-white mb-8 z-10">{message}</div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white w-full overflow-hidden absolute inset-0">
+      <div className="text-3xl font-bold text-slate-800 mb-8 z-10">{message}</div>
       
       {/* Table Surface */}
       <div 
         ref={containerRef}
-        className="relative w-full max-w-5xl h-[400px] bg-gray-700 rounded-[3rem] shadow-2xl flex items-center justify-center border-b-[12px] border-gray-900"
+        className={`relative w-full max-w-5xl h-[400px] rounded-[3rem] shadow-2xl flex items-center justify-center border-b-[12px] overflow-hidden transition-colors duration-300 ${feedbackClasses}`}
         style={{ perspective: '1000px' }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-gray-700 to-gray-800 rounded-[3rem] opacity-50"></div>
@@ -287,13 +348,13 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
             return (
                 <div
                     key={cup.id}
-                    className="absolute bottom-1/3 transition-transform ease-in-out cursor-pointer"
+                    className="absolute left-0 bottom-1/3 cursor-pointer"
                     style={{
-                        transform: `translate3d(${xPos}px, 0, 0)`,
+                      transform: `translate3d(${xPos}px, ${cup.y}px, 0)`,
                         width: `${cupWidth}px`,
                         height: `${cupWidth * 1.3}px`, 
                         zIndex: cup.y + 20,
-                        transitionDuration: `${transitionDuration}ms`,
+                      transition: `transform ${transitionDuration}ms cubic-bezier(0.22, 0.61, 0.36, 1)`,
                     }}
                     onClick={() => handleCupClick(cup.id)}
                 >
@@ -341,7 +402,7 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
         })}
       </div>
       
-      <div className="mt-8 text-slate-400 font-mono">
+      <div className="mt-8 text-slate-500 font-mono">
         Nivel: {level}
       </div>
     </div>
