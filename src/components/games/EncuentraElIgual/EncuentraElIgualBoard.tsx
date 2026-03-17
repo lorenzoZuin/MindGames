@@ -315,7 +315,7 @@ const EncuentraElIgualBoard: React.FC<EncuentraElIgualBoardProps> = ({
         </div>
       </div>
 
-      <div className={`grid ${getColumnsClass()} gap-3 md:gap-4`}>
+      <div className={`grid ${getColumnsClass()} gap-3 md:gap-4 lg:max-w-lg xl:max-w-lg lg:mx-auto`}>
         {tiles.map((tile) => {
           const feedback = tileFeedback[tile.id];
           const tileClasses = tile.found

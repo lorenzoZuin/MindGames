@@ -1,7 +1,7 @@
 export const ORDERED_PHRASES: string[] = [
   'hoy llueve en la ciudad',
   'mama cocina la sopa',
-  'la nina canta feliz',
+  'la niña canta feliz',
   'el perro corre rapido',
   'el sol brilla mucho',
   'hoy leo los cuentos cortos',
