@@ -125,11 +125,11 @@ const GameBoard: React.FC<GameBoardProps> = ({ level, isInfinite, onComplete, on
   return (
     <div className="max-w-4xl w-full flex flex-col items-center space-y-8">
       {/* Header Info */}
-      <div className="w-full flex justify-between items-center bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100">
+      <div className="w-full flex justify-between items-center bg-white p-4 sm:p-6 rounded-[2rem] shadow-xl border border-gray-100 gap-3">
         <div className="flex gap-3">
           <button 
             onClick={onQuit} 
-            className="bg-slate-100 hover:bg-slate-200 text-slate-600 p-5 rounded-2xl text-3xl transition-all shadow-sm active:scale-95"
+              className="bg-slate-100 hover:bg-slate-200 text-slate-600 p-3 sm:p-5 rounded-2xl text-xl sm:text-3xl transition-all shadow-sm active:scale-95"
           >
             <i className="fas fa-home"></i>
           </button>
@@ -137,18 +137,18 @@ const GameBoard: React.FC<GameBoardProps> = ({ level, isInfinite, onComplete, on
           {isInfinite && (
             <button 
               onClick={handleFinishInfinite} 
-              className="bg-green-500 hover:bg-green-600 text-white px-8 rounded-2xl text-2xl font-black uppercase shadow-md active:scale-95"
+              className="bg-green-500 hover:bg-green-600 text-white px-4 sm:px-8 rounded-2xl text-base sm:text-2xl font-black uppercase shadow-md active:scale-95"
             >
               Cerrar
             </button>
           )}
         </div>
         
-        <div className="text-3xl font-black text-slate-800 uppercase tracking-tight">
+        <div className="text-sm sm:text-2xl md:text-3xl font-black text-slate-800 uppercase tracking-tight text-center leading-tight break-words">
           {isInfinite ? `Aciertos: ${score}` : `Nivel ${level}: ${currentQuestionIdx + 1}/${QUESTIONS_PER_LEVEL}`}
         </div>
 
-        <div className="text-3xl font-black text-blue-500 tabular-nums">
+        <div className="text-lg sm:text-2xl md:text-3xl font-black text-blue-500 tabular-nums whitespace-nowrap">
           <i className="fas fa-clock mr-2 opacity-30"></i>
           {elapsed}s
         </div>
@@ -156,11 +156,11 @@ const GameBoard: React.FC<GameBoardProps> = ({ level, isInfinite, onComplete, on
 
       {/* Main Challenge Area */}
       <div className={`
-        relative w-full bg-white py-28 px-8 rounded-[3rem] shadow-2xl transition-all duration-300 border-4 overflow-hidden
+        relative w-full bg-white py-14 sm:py-20 md:py-28 px-4 sm:px-8 rounded-[2rem] md:rounded-[3rem] shadow-2xl transition-all duration-300 border-4 overflow-hidden
         ${isWrong ? 'border-red-500 animate-shake' : isCorrect ? 'border-green-500 scale-105' : 'border-transparent'}
       `}>
         <div 
-          className="text-[8rem] font-black text-center select-none uppercase transition-colors leading-none break-words max-w-full"
+          className="text-6xl sm:text-7xl md:text-[8rem] font-black text-center select-none uppercase transition-colors leading-none break-words max-w-full"
           style={{ color: question.colorValue }}
         >
           {question.word}
@@ -168,12 +168,12 @@ const GameBoard: React.FC<GameBoardProps> = ({ level, isInfinite, onComplete, on
       </div>
 
       {/* Options Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-4xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 w-full max-w-4xl">
         {question.options.map((option) => (
           <button
             key={option}
             onClick={() => handleAnswer(option)}
-            className="bg-slate-900 text-white hover:bg-blue-600 text-4xl font-black py-10 px-4 rounded-[2rem] shadow-xl transition-all active:scale-95 uppercase tracking-wide break-words overflow-hidden"
+            className="bg-slate-900 text-white hover:bg-blue-600 text-2xl sm:text-3xl md:text-4xl font-black py-6 sm:py-8 md:py-10 px-4 rounded-[1.5rem] md:rounded-[2rem] shadow-xl transition-all active:scale-95 uppercase tracking-wide break-words overflow-hidden"
           >
             {option}
           </button>
