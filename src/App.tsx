@@ -6,17 +6,20 @@ import CoinGameMenu from './components/games/SeguirLaMoneda/MenuSeguirLaMoneda';
 import RecordarNombresMenu from './components/games/RecordarNombres/MenuRecordarNombres';
 import MenuOrdenaLaFrase from './components/games/OrdenaLaFrase/MenuOrdenaLaFrase';
 import MenuEncuentraElIgual from './components/games/EncuentraElIgual/MenuEncuentraElIgual';
+import MenuDefiniciones from './components/games/Definiciones/MenuDefiniciones';
 import GameSelectionMenu from './components/shared/GameSelectionMenu';
 import LevelSelector from './components/games/Colores/LevelSelector';
 import CoinLevelSelector from './components/games/SeguirLaMoneda/LevelSelector';
 import RecordarNombresLevelSelector from './components/games/RecordarNombres/LevelSelector';
 import OrdenaLaFraseLevelSelector from './components/games/OrdenaLaFrase/LevelSelector';
 import EncuentraElIgualLevelSelector from './components/games/EncuentraElIgual/LevelSelector';
+import DefinicionesLevelSelector from './components/games/Definiciones/LevelSelector';
 import GameBoard from './components/games/Colores/GameBoard';
 import CoinGameBoard from './components/games/SeguirLaMoneda/CoinGameBoard';
 import RecordarNombresBoard from './components/games/RecordarNombres/RecordarNombresBoard';
 import OrdenaLaFraseBoard from './components/games/OrdenaLaFrase/OrdenaLaFraseBoard';
 import EncuentraElIgualBoard from './components/games/EncuentraElIgual/EncuentraElIgualBoard';
+import DefinicionesBoard from './components/games/Definiciones/DefinicionesBoard';
 import ResultScreen from './components/shared/ResultScreen';
 import { TOTAL_LEVELS } from './constants';
 
@@ -79,6 +82,17 @@ const App: React.FC = () => {
     }));
   });
 
+  const [definicionesHistory, setDefinicionesHistory] = useState<LevelProgress[]>(() => {
+    const saved = localStorage.getItem('definiciones_progress');
+    if (saved) return JSON.parse(saved);
+    return Array.from({ length: TOTAL_LEVELS }, (_, i) => ({
+      levelNumber: i + 1,
+      stars: 0,
+      timeTaken: 0,
+      completed: false,
+    }));
+  });
+
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const [lastResult, setLastResult] = useState<LevelProgress | null>(null);
 
@@ -102,6 +116,10 @@ const App: React.FC = () => {
     localStorage.setItem('encuentraigual_progress', JSON.stringify(encuentraIgualHistory));
   }, [encuentraIgualHistory]);
 
+  useEffect(() => {
+    localStorage.setItem('definiciones_progress', JSON.stringify(definicionesHistory));
+  }, [definicionesHistory]);
+
   const handleLevelComplete = (metric1: number, metric2: number) => {
     const isInfinite = gameState === 'INFINITE';
     
@@ -121,6 +139,9 @@ const App: React.FC = () => {
     } else if (selectedGame === 'igual') {
       currentHistory = encuentraIgualHistory;
       setHistory = setEncuentraIgualHistory;
+    } else if (selectedGame === 'definiciones') {
+      currentHistory = definicionesHistory;
+      setHistory = setDefinicionesHistory;
     }
 
     // Determine what the metrics mean
@@ -181,7 +202,7 @@ const App: React.FC = () => {
 
   const handleSelectGame = (gameId: string) => {
     setSelectedGame(gameId);
-    if (gameId === 'colores' || gameId === 'moneda' || gameId === 'nombres' || gameId === 'frase' || gameId === 'igual') {
+    if (gameId === 'colores' || gameId === 'moneda' || gameId === 'nombres' || gameId === 'frase' || gameId === 'igual' || gameId === 'definiciones') {
       setGameState('MENU');
     }
   };
@@ -198,7 +219,7 @@ const App: React.FC = () => {
           }}
           className="absolute top-4 left-4 p-3 text-slate-400 hover:text-slate-600 transition-colors z-50 text-2xl font-bold bg-white/50 backdrop-blur rounded-full shadow-sm"
         >
-          <i className="fas fa-arrow-left"></i>
+          <i className={gameState === 'MENU' ? "fas fa-house text-4xl" : "fas fa-arrow-left text-4xl"}></i>
         </button>
       )}
 
@@ -237,6 +258,13 @@ const App: React.FC = () => {
 
       {gameState === 'MENU' && selectedGame === 'igual' && (
         <MenuEncuentraElIgual
+          onPlay={() => setGameState('LEVEL_SELECTOR')}
+          onInfinite={startInfinite}
+        />
+      )}
+
+      {gameState === 'MENU' && selectedGame === 'definiciones' && (
+        <MenuDefiniciones
           onPlay={() => setGameState('LEVEL_SELECTOR')}
           onInfinite={startInfinite}
         />
@@ -283,6 +311,14 @@ const App: React.FC = () => {
         />
       )}
 
+      {gameState === 'LEVEL_SELECTOR' && selectedGame === 'definiciones' && (
+        <DefinicionesLevelSelector
+          levels={definicionesHistory}
+          onSelectLevel={startLevel}
+          onBack={() => setGameState('MENU')}
+        />
+      )}
+
       {/* Game Boards */}
       {(gameState === 'PLAYING' || gameState === 'INFINITE') && selectedGame === 'colores' && (
         <GameBoard 
@@ -321,6 +357,15 @@ const App: React.FC = () => {
 
       {(gameState === 'PLAYING' || gameState === 'INFINITE') && selectedGame === 'igual' && (
         <EncuentraElIgualBoard
+          level={currentLevel}
+          isInfinite={gameState === 'INFINITE'}
+          onGameComplete={(stars, timeTaken) => handleLevelComplete(stars, timeTaken)}
+          onExit={() => setGameState('MENU')}
+        />
+      )}
+
+      {(gameState === 'PLAYING' || gameState === 'INFINITE') && selectedGame === 'definiciones' && (
+        <DefinicionesBoard
           level={currentLevel}
           isInfinite={gameState === 'INFINITE'}
           onGameComplete={(stars, timeTaken) => handleLevelComplete(stars, timeTaken)}
