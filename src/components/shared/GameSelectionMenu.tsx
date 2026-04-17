@@ -11,6 +11,7 @@ interface Game {
 
 interface GameSelectionMenuProps {
   onSelectGame: (gameId: string) => void;
+  onAbout: () => void;
 }
 
 const GAMES: Game[] = [
@@ -57,10 +58,10 @@ const GAMES: Game[] = [
   }
 ];
 
-const GameSelectionMenu: React.FC<GameSelectionMenuProps> = ({ onSelectGame }) => {
+const GameSelectionMenu: React.FC<GameSelectionMenuProps> = ({ onSelectGame, onAbout }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-12">
-      <div className="text-center mb-16">
+    <div className="flex flex-col items-center justify-center max-h-screen py-6">
+      <div className="text-center mb-12">
         <h1 className="text-6xl md:text-8xl font-black tracking-tight mb-4 text-slate-800">
           Mind<span className="text-blue-500">Games</span>
         </h1>
@@ -107,6 +108,13 @@ const GameSelectionMenu: React.FC<GameSelectionMenuProps> = ({ onSelectGame }) =
           </button>
         ))}
       </div>
+
+      <button
+        onClick={onAbout}
+        className="fixed right-3 md:right-6 bottom-6 px-6 md:px-10 py-3 md:py-4 rounded-2xl text-slate-500 border-2 border-transparent hover:border-slate-300 text-lg md:text-xl font-bold tracking-wide z-40"
+      >
+        Sobre nosotros
+      </button>
     </div>
   );
 };

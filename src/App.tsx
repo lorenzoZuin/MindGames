@@ -21,6 +21,7 @@ import OrdenaLaFraseBoard from './components/games/OrdenaLaFrase/OrdenaLaFraseBo
 import EncuentraElIgualBoard from './components/games/EncuentraElIgual/EncuentraElIgualBoard';
 import DefinicionesBoard from './components/games/Definiciones/DefinicionesBoard';
 import ResultScreen from './components/shared/ResultScreen';
+import AboutPage from './components/shared/AboutPage';
 import { TOTAL_LEVELS } from './constants';
 
 const App: React.FC = () => {
@@ -213,19 +214,25 @@ const App: React.FC = () => {
           <button 
           onClick={() => {
             if (gameState === 'MENU') setGameState('HOME');
+            else if (gameState === 'ABOUT') setGameState('HOME');
             else if (gameState === 'LEVEL_SELECTOR') setGameState('MENU');
             else if (gameState === 'PLAYING' || gameState === 'INFINITE') setGameState('MENU');
             else if (gameState === 'RESULT') setGameState('MENU');
           }}
-          className="absolute top-4 left-4 p-3 text-slate-400 hover:text-slate-600 transition-colors z-50 text-2xl font-bold bg-white/50 backdrop-blur rounded-full shadow-sm"
+          className="absolute top-4 left-4 p-3 text-slate-400 hover:text-slate-600 transition-colors z-50 text-2xl font-bold backdrop-blur rounded-full shadow-sm"
         >
           <i className={gameState === 'MENU' ? "fas fa-house text-4xl" : "fas fa-arrow-left text-4xl"}></i>
         </button>
       )}
 
       {gameState === 'HOME' && (
-        <GameSelectionMenu onSelectGame={handleSelectGame} />
+        <GameSelectionMenu
+          onSelectGame={handleSelectGame}
+          onAbout={() => setGameState('ABOUT')}
+        />
       )}
+
+      {gameState === 'ABOUT' && <AboutPage />}
 
       {/* Menus */}
       {gameState === 'MENU' && selectedGame === 'colores' && (

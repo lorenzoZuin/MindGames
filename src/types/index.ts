@@ -12,7 +12,7 @@ export interface LevelProgress {
   completed: boolean;
 }
 
-export type GameState = 'HOME' | 'MENU' | 'LEVEL_SELECTOR' | 'PLAYING' | 'RESULT' | 'INFINITE';
+export type GameState = 'HOME' | 'ABOUT' | 'MENU' | 'LEVEL_SELECTOR' | 'PLAYING' | 'RESULT' | 'INFINITE';
 
 export interface Question {
   word: string;
