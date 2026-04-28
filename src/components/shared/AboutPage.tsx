@@ -2,19 +2,19 @@ import React from 'react';
 
 const AboutPage: React.FC = () => {
   return (
-    <section className="w-full max-w-5xl bg-white rounded-3xl shadow-xl border border-slate-200 px-7 py-10 md:px-14 md:py-14">
-      <header className="mb-10">
-        <p className="text-sm md:text-base uppercase tracking-[0.2em] text-slate-400 font-semibold mb-3">
+    <section className="w-full max-w-5xl bg-white rounded-2xl md:rounded-3xl shadow-xl border border-slate-200 px-4 sm:px-6 md:px-14 py-6 sm:py-8 md:py-14 mx-4 sm:mx-6 md:mx-0">
+      <header className="mb-6 md:mb-10">
+        <p className="text-xs sm:text-sm md:text-base uppercase tracking-[0.2em] text-slate-400 font-semibold mb-2 md:mb-3">
           Sobre MindGames
         </p>
-        <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-6xl font-bold text-slate-900 leading-tight">
           Entrenamiento cognitivo accesible para adultos mayores
         </h1>
       </header>
-      <article className="space-y-9 text-xl md:text-2xl text-slate-700 leading-relaxed md:leading-relaxed">
+      <article className="space-y-5 md:space-y-9 text-base sm:text-lg md:text-2xl text-slate-700 leading-relaxed md:leading-relaxed">
     
-        <div className="space-y-3">
-            <h2 className="text-3xl md:text-4xl font-semibold text-slate-900">Para quién está pensada</h2>
+        <div className="space-y-2 md:space-y-3">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-semibold text-slate-900">Para quién está pensada</h2>
             <p>
                 MindGames es una aplicación de ejercicios mentales destinada especialmente a adultos
                 mayores. Cada actividad busca estimular la memoria, la atención, el lenguaje y la
@@ -31,8 +31,8 @@ const AboutPage: React.FC = () => {
             </p>
         </div>
         
-        <div className="space-y-3">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900">Quién está detrás</h2>
+        <div className="space-y-2 md:space-y-3">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-semibold text-slate-900">Quién está detrás</h2>
           <p>
             Soy un ingeniero en sistemas de Córdoba y desarrollé esta aplicación para que cualquier persona pueda
             entrenar su mente de forma simple, gratuita y sin publicidad.
@@ -49,8 +49,8 @@ const AboutPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="space-y-3">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900">Beneficios del entrenamiento mental</h2>
+        <div className="space-y-2 md:space-y-3">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-semibold text-slate-900">Beneficios del entrenamiento mental</h2>
           <p>
             Practicar este tipo de ejercicios de manera constante ayuda a mantener la mente activa,
             fortalece funciones cognitivas del día a día y aporta más seguridad al resolver tareas
@@ -66,8 +66,8 @@ const AboutPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="space-y-3">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900">Contacto</h2>
+        <div className="space-y-2 md:space-y-3">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-semibold text-slate-900">Contacto</h2>
           <p>
             Si tenés sugerencias, comentarios o ideas para mejorar la experiencia, podés escribir a
             {' '}

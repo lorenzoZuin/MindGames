@@ -199,7 +199,7 @@ const OrdenaLaFraseBoard: React.FC<OrdenaLaFraseBoardProps> = ({
   };
 
   return (
-    <div className="max-w-5xl w-full flex flex-col items-center space-y-8">
+    <div className="max-w-5xl w-full flex flex-col items-center space-y-4 sm:space-y-6 md:space-y-8 px-3 sm:px-4 md:px-6 lg:px-8">
       <div className="w-full flex justify-between items-center bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100">
         <button
           onClick={onExit}
@@ -222,7 +222,7 @@ const OrdenaLaFraseBoard: React.FC<OrdenaLaFraseBoardProps> = ({
       </div>
 
       <div className="relative w-full bg-white py-12 px-8 rounded-[3rem] shadow-2xl border border-gray-100">
-        <h2 className="text-4xl md:text-5xl font-black text-center text-slate-800 uppercase tracking-tight mb-3">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-center text-slate-800 uppercase tracking-tight mb-3">
           Ordena la frase
         </h2>
         <p className="text-slate-500 text-center font-bold uppercase tracking-wide mb-10">

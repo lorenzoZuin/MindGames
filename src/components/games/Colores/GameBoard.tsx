@@ -123,7 +123,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ level, isInfinite, onComplete, on
   if (!question) return null;
 
   return (
-    <div className="max-w-4xl w-full flex flex-col items-center space-y-8">
+    <div className="max-w-4xl w-full flex flex-col items-center space-y-4 sm:space-y-6 md:space-y-8 px-3 sm:px-4 md:px-6 lg:px-8">
       {/* Header Info */}
       <div className="w-full flex justify-between items-center bg-white p-4 sm:p-6 rounded-[2rem] shadow-xl border border-gray-100 gap-3">
         <div className="flex gap-3">

@@ -286,7 +286,7 @@ const EncuentraElIgualBoard: React.FC<EncuentraElIgualBoardProps> = ({
       : 'border-slate-200 bg-white';
 
   return (
-    <div className={`w-full max-w-4xl rounded-[2.5rem] border-4 p-6 md:p-8 shadow-2xl transition-colors ${panelClasses}`}>
+    <div className={`w-full max-w-4xl rounded-[2.5rem] border-4 p-4 sm:p-6 md:p-8 mx-3 sm:mx-4 md:mx-0 shadow-2xl transition-colors ${panelClasses}`}>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
         <h2 className="text-3xl md:text-4xl font-black text-slate-800 uppercase tracking-tight">
           Encuentra el Igual
@@ -301,10 +301,10 @@ const EncuentraElIgualBoard: React.FC<EncuentraElIgualBoardProps> = ({
         <p className="text-sm md:text-base font-bold uppercase tracking-widest text-slate-500 mb-3">Objetivo</p>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-white shadow-inner flex items-center justify-center text-4xl md:text-5xl">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-2xl bg-white shadow-inner flex items-center justify-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
               {targetSymbol}
             </div>
-            <p className="text-xl md:text-2xl font-black text-slate-700">Toca todas las iguales</p>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-slate-700">Toca todas las iguales</p>
           </div>
           <div className="text-right">
             <p className="text-slate-500 font-bold">Encontradas: {foundCount}/{targetCount}</p>
@@ -331,7 +331,7 @@ const EncuentraElIgualBoard: React.FC<EncuentraElIgualBoardProps> = ({
               key={tile.id}
               onClick={() => handleTileClick(tile.id)}
               disabled={status !== 'playing' || tile.found}
-              className={`aspect-square rounded-2xl border-4 text-4xl md:text-5xl shadow-sm transition-all active:scale-95 ${tileClasses}`}
+              className={`aspect-square rounded-2xl border-4 text-2xl sm:text-3xl md:text-4xl lg:text-5xl shadow-sm transition-all active:scale-95 ${tileClasses}`}
             >
               {tile.symbol}
             </button>

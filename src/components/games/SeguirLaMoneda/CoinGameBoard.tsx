@@ -323,8 +323,8 @@ const CoinGameBoard: React.FC<CoinGameBoardProps> = ({ onGameEnd, initialLevel, 
       : 'border-gray-900 bg-gray-700';
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white w-full overflow-hidden absolute inset-0">
-      <div className="text-3xl font-bold text-slate-800 mb-8 z-10">{message}</div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white w-full overflow-hidden absolute inset-0 px-3 sm:px-4 md:px-6">
+      <div className="text-lg sm:text-2xl md:text-3xl font-bold text-slate-800 mb-6 sm:mb-8 z-10">{message}</div>
       
       {/* Table Surface */}
       <div 

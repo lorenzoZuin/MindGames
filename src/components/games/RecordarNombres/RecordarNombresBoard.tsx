@@ -200,7 +200,7 @@ const RecordarNombresBoard: React.FC<GameBoardProps> = ({ level, isInfinite = fa
 
   if (phase === 'memorize') {
     return (
-      <div className="max-w-4xl w-full flex flex-col items-center space-y-8">
+      <div className="max-w-4xl w-full flex flex-col items-center space-y-4 sm:space-y-6 md:space-y-8 px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="w-full flex justify-between items-center bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100">
           <button
             onClick={onExit}
@@ -220,7 +220,7 @@ const RecordarNombresBoard: React.FC<GameBoardProps> = ({ level, isInfinite = fa
         </div>
 
         <div className="relative w-full bg-white py-14 px-8 rounded-[3rem] shadow-2xl border border-gray-100">
-          <h2 className="text-5xl font-black text-center text-slate-800 uppercase tracking-tight mb-10">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-center text-slate-800 uppercase tracking-tight mb-10">
             Memoriza
           </h2>
 
@@ -251,11 +251,11 @@ const RecordarNombresBoard: React.FC<GameBoardProps> = ({ level, isInfinite = fa
   }
 
   return (
-    <div className="max-w-4xl w-full flex flex-col items-center space-y-8">
+    <div className="max-w-4xl w-full flex flex-col items-center space-y-4 sm:space-y-6 md:space-y-8 px-3 sm:px-4 md:px-6 lg:px-8">
       <div className="w-full flex justify-between items-center bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100">
         <button
           onClick={onExit}
-          className="bg-slate-100 hover:bg-slate-200 text-slate-600 p-5 rounded-2xl text-3xl transition-all shadow-sm active:scale-95"
+          className="bg-slate-100 hover:bg-slate-200 text-slate-600 p-5 rounded-2xl text-3xl transition-all shadow-m active:scale-95"
         >
           <i className="fas fa-home"></i>
         </button>
@@ -270,7 +270,7 @@ const RecordarNombresBoard: React.FC<GameBoardProps> = ({ level, isInfinite = fa
       </div>
 
       <div className="relative w-full bg-white py-12 px-8 rounded-[3rem] shadow-2xl border border-gray-100">
-        <h2 className="text-4xl md:text-5xl font-black text-center text-slate-800 uppercase tracking-tight mb-3">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-center text-slate-800 uppercase tracking-tight mb-3">
           ¿Quién es quién?
         </h2>
         <p className="text-slate-500 text-center font-bold uppercase tracking-wide mb-10">Asigna los nombres correctos</p>

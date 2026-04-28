@@ -235,7 +235,7 @@ const DefinicionesBoard: React.FC<DefinicionesBoardProps> = ({
       : 'min-w-[calc(50%-0.5rem)] md:min-w-[calc(33.333%-0.75rem)]';
 
   return (
-    <div className={`w-full max-w-4xl rounded-[2.5rem] border-4 p-6 md:p-8 shadow-2xl transition-colors ${panelClasses}`}>
+    <div className={`w-full max-w-4xl rounded-[2.5rem] border-4 p-4 sm:p-6 md:p-8 mx-3 sm:mx-4 md:mx-0 shadow-2xl transition-colors ${panelClasses}`}>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
         <h2 className="text-3xl md:text-4xl font-black text-slate-800 uppercase tracking-tight">
           Definiciones
@@ -252,7 +252,7 @@ const DefinicionesBoard: React.FC<DefinicionesBoardProps> = ({
         <p className="text-sm md:text-base font-bold uppercase tracking-widest text-slate-500 mb-3">
           Definicion
         </p>
-        <p className="text-xl md:text-2xl font-black text-slate-700 leading-snug">{definition}</p>
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-black text-slate-700 leading-snug">{definition}</p>
       </div>
 
       <div className="flex flex-wrap gap-3 md:gap-4">
@@ -271,7 +271,7 @@ const DefinicionesBoard: React.FC<DefinicionesBoardProps> = ({
               key={word}
               onClick={() => handleSelectWord(word)}
               disabled={status !== 'playing'}
-              className={`flex-1 ${buttonMinWidthClass} min-h-20 px-4 py-4 rounded-2xl border-4 text-xl md:text-2xl font-black shadow-sm transition-all active:scale-95 ${buttonClass}`}
+              className={`flex-1 ${buttonMinWidthClass} min-h-16 sm:min-h-20 px-3 sm:px-4 py-3 sm:py-4 rounded-2xl border-4 text-base sm:text-lg md:text-xl lg:text-2xl font-black shadow-sm transition-all active:scale-95 ${buttonClass}`}
             >
               {word}
             </button>

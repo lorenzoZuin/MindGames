@@ -22,33 +22,33 @@ const GameModeMenu: React.FC<GameModeMenuProps> = ({
   descriptionWidthClassName = 'max-w-xs'
 }) => {
   return (
-    <div className="flex flex-col items-center justify-center space-y-12">
+    <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:space-y-12 px-4 sm:px-6">
       <div className="text-center">
         {title}
-        <p className="text-xl md:text-3xl font-bold text-slate-500 uppercase tracking-widest mt-4">
+        <p className="text-base sm:text-xl md:text-2xl lg:text-3xl font-bold text-slate-500 uppercase tracking-widest mt-2 sm:mt-3 md:mt-4">
           {subtitle}
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 w-full max-w-md px-6">
+      <div className="flex flex-col gap-3 sm:gap-4 w-full max-w-sm px-2 sm:px-4">
         <button
           onClick={onPlay}
-          className={`${levelsButtonClassName} text-white text-2xl font-black py-8 px-12 rounded-[2rem] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-4 uppercase`}
+          className={`${levelsButtonClassName} text-white text-lg sm:text-xl md:text-2xl font-black py-4 sm:py-6 md:py-8 px-6 sm:px-8 md:px-12 rounded-xl sm:rounded-2xl md:rounded-[2rem] shadow-lg sm:shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2 sm:gap-3 md:gap-4 uppercase`}
         >
-          <i className="fas fa-th-large text-4xl"></i>
+          <i className="fas fa-th-large text-2xl sm:text-3xl md:text-4xl"></i>
           Niveles
         </button>
 
         <button
           onClick={onInfinite}
-          className={`${infiniteButtonClassName} text-white text-2xl font-black py-8 px-12 rounded-[2rem] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-4 uppercase`}
+          className={`${infiniteButtonClassName} text-white text-lg sm:text-xl md:text-2xl font-black py-4 sm:py-6 md:py-8 px-6 sm:px-8 md:px-12 rounded-xl sm:rounded-2xl md:rounded-[2rem] shadow-lg sm:shadow-xl transition-all active:scale-95 flex items-center justify-center gap-2 sm:gap-3 md:gap-4 uppercase`}
         >
-          <i className="fas fa-infinity text-4xl"></i>
+          <i className="fas fa-infinity text-2xl sm:text-3xl md:text-4xl"></i>
           Modo Infinito
         </button>
       </div>
 
-      <div className={`pt-12 text-slate-400 font-bold text-xl text-center ${descriptionWidthClassName} leading-relaxed`}>
+      <div className={`pt-6 sm:pt-8 md:pt-12 text-slate-400 font-bold text-base sm:text-lg md:text-xl text-center ${descriptionWidthClassName} leading-relaxed px-2`}>
         <p>{description}</p>
       </div>
     </div>
