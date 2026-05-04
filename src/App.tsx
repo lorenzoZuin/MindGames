@@ -20,7 +20,15 @@ import RecordarNombresBoard from './components/games/RecordarNombres/RecordarNom
 import OrdenaLaFraseBoard from './components/games/OrdenaLaFrase/OrdenaLaFraseBoard';
 import EncuentraElIgualBoard from './components/games/EncuentraElIgual/EncuentraElIgualBoard';
 import DefinicionesBoard from './components/games/Definiciones/DefinicionesBoard';
+import MenuLectoComprension from './components/games/LectoComprension/MenuLectoComprension';
+import LectoComprensionLevelSelector from './components/games/LectoComprension/LevelSelector';
+import LectoComprensionBoard from './components/games/LectoComprension/LectoComprensionBoard';
+import { TOTAL_LEVELS_LECTO } from './components/games/LectoComprension/constants';
 import ResultScreen from './components/shared/ResultScreen';
+import MenuOrdenPasos from './components/games/OrdenPasos/MenuOrdenPasos';
+import OrdenPasosLevelSelector from './components/games/OrdenPasos/LevelSelector';
+import OrdenPasosBoard from './components/games/OrdenPasos/OrdenPasosBoard';
+import { TOTAL_LEVELS_ORDEN } from './components/games/OrdenPasos/constants';
 import AboutPage from './components/shared/AboutPage';
 import { TOTAL_LEVELS } from './constants';
 
@@ -94,6 +102,28 @@ const App: React.FC = () => {
     }));
   });
 
+  const [lectoComprensionHistory, setLectoComprensionHistory] = useState<LevelProgress[]>(() => {
+    const saved = localStorage.getItem('lectocomprension_progress');
+    if (saved) return JSON.parse(saved);
+    return Array.from({ length: TOTAL_LEVELS_LECTO }, (_, i) => ({
+      levelNumber: i + 1,
+      stars: 0,
+      timeTaken: 0,
+      completed: false,
+    }));
+  });
+
+  const [ordenPasosHistory, setOrdenPasosHistory] = useState<LevelProgress[]>(() => {
+    const saved = localStorage.getItem('ordenpasos_progress');
+    if (saved) return JSON.parse(saved);
+    return Array.from({ length: TOTAL_LEVELS_ORDEN }, (_, i) => ({
+      levelNumber: i + 1,
+      stars: 0,
+      timeTaken: 0,
+      completed: false,
+    }));
+  });
+
   const [currentLevel, setCurrentLevel] = useState<number>(1);
   const [lastResult, setLastResult] = useState<LevelProgress | null>(null);
 
@@ -121,6 +151,14 @@ const App: React.FC = () => {
     localStorage.setItem('definiciones_progress', JSON.stringify(definicionesHistory));
   }, [definicionesHistory]);
 
+  useEffect(() => {
+    localStorage.setItem('lectocomprension_progress', JSON.stringify(lectoComprensionHistory));
+  }, [lectoComprensionHistory]);
+
+  useEffect(() => {
+    localStorage.setItem('ordenpasos_progress', JSON.stringify(ordenPasosHistory));
+  }, [ordenPasosHistory]);
+
   const handleLevelComplete = (metric1: number, metric2: number) => {
     const isInfinite = gameState === 'INFINITE';
     
@@ -143,6 +181,12 @@ const App: React.FC = () => {
     } else if (selectedGame === 'definiciones') {
       currentHistory = definicionesHistory;
       setHistory = setDefinicionesHistory;
+    } else if (selectedGame === 'lectocomprension') {
+      currentHistory = lectoComprensionHistory;
+      setHistory = setLectoComprensionHistory;
+    } else if (selectedGame === 'ordenpasos') {
+      currentHistory = ordenPasosHistory;
+      setHistory = setOrdenPasosHistory;
     }
 
     // Determine what the metrics mean
@@ -203,7 +247,7 @@ const App: React.FC = () => {
 
   const handleSelectGame = (gameId: string) => {
     setSelectedGame(gameId);
-    if (gameId === 'colores' || gameId === 'moneda' || gameId === 'nombres' || gameId === 'frase' || gameId === 'igual' || gameId === 'definiciones') {
+    if (['colores', 'moneda', 'nombres', 'frase', 'igual', 'definiciones', 'lectocomprension', 'ordenpasos'].includes(gameId)) {
       setGameState('MENU');
     }
   };
@@ -277,6 +321,20 @@ const App: React.FC = () => {
         />
       )}
 
+      {gameState === 'MENU' && selectedGame === 'lectocomprension' && (
+        <MenuLectoComprension
+          onPlay={() => setGameState('LEVEL_SELECTOR')}
+          onInfinite={startInfinite}
+        />
+      )}
+
+      {gameState === 'MENU' && selectedGame === 'ordenpasos' && (
+        <MenuOrdenPasos
+          onPlay={() => setGameState('LEVEL_SELECTOR')}
+          onInfinite={startInfinite}
+        />
+      )}
+
       {/* Level Selectors */}
       {gameState === 'LEVEL_SELECTOR' && selectedGame === 'colores' && (
         <LevelSelector 
@@ -321,6 +379,22 @@ const App: React.FC = () => {
       {gameState === 'LEVEL_SELECTOR' && selectedGame === 'definiciones' && (
         <DefinicionesLevelSelector
           levels={definicionesHistory}
+          onSelectLevel={startLevel}
+          onBack={() => setGameState('MENU')}
+        />
+      )}
+
+      {gameState === 'LEVEL_SELECTOR' && selectedGame === 'lectocomprension' && (
+        <LectoComprensionLevelSelector
+          levels={lectoComprensionHistory}
+          onSelectLevel={startLevel}
+          onBack={() => setGameState('MENU')}
+        />
+      )}
+
+      {gameState === 'LEVEL_SELECTOR' && selectedGame === 'ordenpasos' && (
+        <OrdenPasosLevelSelector
+          levels={ordenPasosHistory}
           onSelectLevel={startLevel}
           onBack={() => setGameState('MENU')}
         />
@@ -380,13 +454,35 @@ const App: React.FC = () => {
         />
       )}
 
+      {(gameState === 'PLAYING' || gameState === 'INFINITE') && selectedGame === 'lectocomprension' && (
+        <LectoComprensionBoard
+          level={currentLevel}
+          isInfinite={gameState === 'INFINITE'}
+          onGameComplete={(stars, timeTaken) => handleLevelComplete(stars, timeTaken)}
+          onExit={() => setGameState('MENU')}
+        />
+      )}
+
+      {(gameState === 'PLAYING' || gameState === 'INFINITE') && selectedGame === 'ordenpasos' && (
+        <OrdenPasosBoard
+          level={currentLevel}
+          isInfinite={gameState === 'INFINITE'}
+          onGameComplete={(stars, timeTaken) => handleLevelComplete(stars, timeTaken)}
+          onExit={() => setGameState('MENU')}
+        />
+      )}
+
       {gameState === 'RESULT' && lastResult && (
         <ResultScreen 
           result={lastResult}
           isInfinite={lastResult.levelNumber === -1}
           gameType={selectedGame}
           onNext={() => {
-            if (currentLevel < TOTAL_LEVELS) {
+            let maxLevels = TOTAL_LEVELS;
+            if (selectedGame === 'lectocomprension') maxLevels = TOTAL_LEVELS_LECTO;
+            if (selectedGame === 'ordenpasos') maxLevels = TOTAL_LEVELS_ORDEN;
+            
+            if (currentLevel < maxLevels) {
               startLevel(currentLevel + 1);
             } else {
               setGameState('LEVEL_SELECTOR');

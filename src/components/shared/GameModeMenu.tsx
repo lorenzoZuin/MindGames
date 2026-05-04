@@ -19,7 +19,7 @@ const GameModeMenu: React.FC<GameModeMenuProps> = ({
   description,
   levelsButtonClassName,
   infiniteButtonClassName,
-  descriptionWidthClassName = 'max-w-xs'
+  descriptionWidthClassName = 'max-w-md sm:max-w-2xl'
 }) => {
   return (
     <div className="flex flex-col items-center justify-center space-y-6 sm:space-y-8 md:space-y-12 px-4 sm:px-6">
@@ -48,7 +48,10 @@ const GameModeMenu: React.FC<GameModeMenuProps> = ({
         </button>
       </div>
 
-      <div className={`pt-6 sm:pt-8 md:pt-12 text-slate-400 font-bold text-base sm:text-lg md:text-xl text-center ${descriptionWidthClassName} leading-relaxed px-2`}>
+      <div className={`pt-6 sm:pt-8 md:pt-12 text-slate-500 font-bold text-lg sm:text-2xl md:text-3xl text-center ${descriptionWidthClassName} leading-relaxed px-4`}>
+        <p className="mb-2 sm:mb-4 uppercase tracking-widest text-sm sm:text-lg md:text-xl text-slate-400 font-black">
+          Instrucciones:
+        </p>
         <p>{description}</p>
       </div>
     </div>

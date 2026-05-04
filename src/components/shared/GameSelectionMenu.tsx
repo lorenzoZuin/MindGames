@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 
 interface Game {
   id: string;
@@ -55,10 +54,41 @@ const GAMES: Game[] = [
     icon: 'fas fa-book-open',
     color: 'bg-gradient-to-br from-emerald-400 to-cyan-500',
     disabled: false
+  },
+  {
+    id: 'lectocomprension',
+    name: 'Lecto Comprensión',
+    icon: 'fas fa-book-reader',
+    color: 'bg-gradient-to-br from-amber-400 to-orange-500',
+    disabled: false
+  },
+  {
+    id: 'ordenpasos',
+    name: 'Ordena Los Pasos',
+    icon: 'fas fa-list-ol',
+    color: 'bg-gradient-to-br from-indigo-400 to-purple-600',
+    disabled: false
   }
 ];
 
 const GameSelectionMenu: React.FC<GameSelectionMenuProps> = ({ onSelectGame, onAbout }) => {
+  const [currentPage, setCurrentPage] = useState(0);
+  const GAMES_PER_PAGE = 6;
+  const totalPages = Math.ceil(GAMES.length / GAMES_PER_PAGE);
+
+  const currentGames = GAMES.slice(
+    currentPage * GAMES_PER_PAGE,
+    (currentPage + 1) * GAMES_PER_PAGE
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) setCurrentPage(currentPage - 1);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-4 sm:py-6 md:py-8 px-3 sm:px-4">
       <div className="text-center mb-8 sm:mb-10 md:mb-12">
@@ -70,8 +100,8 @@ const GameSelectionMenu: React.FC<GameSelectionMenuProps> = ({ onSelectGame, onA
         </p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8 w-full max-w-7xl mb-20 sm:mb-16">
-        {GAMES.map((game) => (
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8 w-full max-w-7xl mb-8 sm:mb-10">
+        {currentGames.map((game) => (
           <button
             key={game.id}
             onClick={() => !game.disabled && onSelectGame(game.id)}
@@ -108,6 +138,42 @@ const GameSelectionMenu: React.FC<GameSelectionMenuProps> = ({ onSelectGame, onA
           </button>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-8 mb-[70px] sm:mb-[80px]">
+          <button
+            onClick={handlePrevPage}
+            disabled={currentPage === 0}
+            className={`flex flex-col items-center transition-all ${
+              currentPage === 0
+                ? 'opacity-0 cursor-default'
+                : 'opacity-100 hover:scale-110 active:scale-95 text-blue-500 cursor-pointer'
+            }`}
+          >
+            <span className="text-xs sm:text-sm font-bold uppercase mb-1">Anteriores</span>
+            <i className="fas fa-arrow-circle-left text-3xl sm:text-5xl"></i>
+          </button>
+
+          <div className="flex flex-col items-center">
+            <span className="text-slate-400 font-bold text-sm sm:text-base">
+              {currentPage + 1} / {totalPages}
+            </span>
+          </div>
+
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages - 1}
+            className={`flex flex-col items-center transition-all ${
+              currentPage === totalPages - 1
+                ? 'opacity-0 cursor-default'
+                : 'opacity-100 hover:scale-110 active:scale-95 text-blue-500 cursor-pointer'
+            }`}
+          >
+            <span className="text-xs sm:text-sm font-bold uppercase mb-1">Más juegos</span>
+            <i className="fas fa-arrow-circle-right text-3xl sm:text-5xl"></i>
+          </button>
+        </div>
+      )}
 
       <button
         onClick={onAbout}
